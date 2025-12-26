@@ -2,12 +2,27 @@
 
 namespace WuriN7i\Balance\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use WuriN7i\Balance\Enums\AccountBehavior;
 use WuriN7i\Balance\Enums\AccountCategory;
+use WuriN7i\Balance\Enums\EntryType;
 
+/**
+ * @property string $id
+ * @property string $code
+ * @property string $name
+ * @property AccountCategory $category
+ * @property AccountBehavior $account_behavior
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<JournalEntry> $journalEntries
+ * @method static Builder ofCategory(AccountCategory $accountCategory)
+ * @method static Builder ofBehavior(AccountBehavior $accoutBehavior)
+ * @method static Builder liquid()
+ */
 class Account extends Model
 {
     use HasUuids;
@@ -49,9 +64,9 @@ class Account extends Model
     /**
      * Get the normal balance type for this account.
      */
-    public function normalBalance(): string
+    public function normalBalance(): EntryType
     {
-        return $this->category->normalBalance()->value;
+        return $this->category->normalBalance();
     }
 
     /**
@@ -81,24 +96,24 @@ class Account extends Model
     /**
      * Scope to filter by category.
      */
-    public function scopeOfCategory($query, AccountCategory $category)
+    public function scopeOfCategory(Builder $query, AccountCategory $category): Builder
     {
-        return $query->where('category', $category);
+        return $query->where($query->qualifyColumn('category'), $category);
     }
 
     /**
      * Scope to filter by behavior.
      */
-    public function scopeOfBehavior($query, AccountBehavior $behavior)
+    public function scopeOfBehavior(Builder $query, AccountBehavior $behavior): Builder
     {
-        return $query->where('account_behavior', $behavior);
+        return $query->where($query->qualifyColumn('account_behavior'), $behavior);
     }
 
     /**
      * Scope to get only liquid accounts.
      */
-    public function scopeLiquid($query)
+    public function scopeLiquid(Builder $query): Builder
     {
-        return $query->where('account_behavior', '!=', AccountBehavior::NON_LIQUID);
+        return $query->whereNot($query->qualifyColumn('account_behavior'), AccountBehavior::NON_LIQUID);
     }
 }

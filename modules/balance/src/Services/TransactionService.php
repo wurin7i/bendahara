@@ -4,6 +4,7 @@ namespace WuriN7i\Balance\Services;
 
 use Illuminate\Support\Facades\DB;
 use WuriN7i\Balance\Contracts\ActorProviderInterface;
+use WuriN7i\Balance\Enums\AccountBehavior;
 use WuriN7i\Balance\Enums\EntryType;
 use WuriN7i\Balance\Enums\TransactionAction;
 use WuriN7i\Balance\Enums\TransactionStatus;
@@ -177,14 +178,20 @@ class TransactionService
             // For expense: DEBIT to expense account, CREDIT to cash/bank account
 
             // TRANSIT_ONLY accounts can only be debited (receive money)
-            if ($account->account_behavior->value === 'TRANSIT_ONLY' && $entryType === EntryType::CREDIT) {
+            if (
+                $account->account_behavior === AccountBehavior::TRANSIT_ONLY
+                && $entryType === EntryType::CREDIT
+            ) {
                 throw new \Exception(
                     "Account '{$account->name}' (TRANSIT_ONLY) can only receive income (DEBIT entry)"
                 );
             }
 
             // CREDIT_ONLY accounts can only be credited (debt/liabilities)
-            if ($account->account_behavior->value === 'CREDIT_ONLY' && $entryType === EntryType::DEBIT) {
+            if (
+                $account->account_behavior === AccountBehavior::CREDIT_ONLY
+                && $entryType === EntryType::DEBIT
+            ) {
                 throw new \Exception(
                     "Account '{$account->name}' (CREDIT_ONLY) can only be used for expenses (CREDIT entry)"
                 );

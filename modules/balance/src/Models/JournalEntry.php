@@ -2,11 +2,29 @@
 
 namespace WuriN7i\Balance\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use WuriN7i\Balance\Enums\EntryType;
 
+/**
+ * @property string $id
+ * @property string $transaction_id
+ * @property string $account_id
+ * @property EntryType $entry_type
+ * @property float $amount
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property-read Transaction $transaction
+ * @property-read Account $account
+ * @method static Builder ofType(EntryType $type)
+ * @method static Builder debits()
+ * @method static Builder credits()
+ * @method static Builder forAccount(string|Account $accountId)
+ * @method static Builder approved()
+ * @method static float totalAmount()
+ */
 class JournalEntry extends Model
 {
     use HasUuids;
@@ -97,42 +115,47 @@ class JournalEntry extends Model
     /**
      * Scope to filter by entry type.
      */
-    public function scopeOfType($query, EntryType $type)
+    public function scopeOfType(Builder $query, EntryType $type): Builder
     {
-        return $query->where('entry_type', $type);
+        return $query->where($query->qualifyColumn('entry_type'), $type);
     }
 
     /**
      * Scope to get only debits.
      */
-    public function scopeDebits($query)
+    public function scopeDebits(Builder $query): Builder
     {
-        return $query->where('entry_type', EntryType::DEBIT);
+        return $this->scopeOfType($query, EntryType::DEBIT);
     }
 
     /**
      * Scope to get only credits.
      */
-    public function scopeCredits($query)
+    public function scopeCredits(Builder $query): Builder
     {
-        return $query->where('entry_type', EntryType::CREDIT);
+        return $this->scopeOfType($query, EntryType::CREDIT);
     }
 
     /**
      * Scope to filter by account.
      */
-    public function scopeForAccount($query, string $accountId)
+    public function scopeForAccount(Builder $query, string|Account $accountId): Builder
     {
-        return $query->where('account_id', $accountId);
+        $accountId = $accountId instanceof Account ? $accountId->id : $accountId;
+
+        return $query->where($query->qualifyColumn('account_id'), $accountId);
     }
 
     /**
      * Scope to get only entries from approved transactions.
      */
-    public function scopeApproved($query)
+    public function scopeApproved(Builder $query): Builder
     {
-        return $query->whereHas('transaction', function ($q) {
-            $q->approved();
-        });
+        return $query->whereHas('transaction', fn(Builder $q) => $q->approved());
+    }
+
+    public function scopeTotalAmount(Builder $query): float
+    {
+        return $query->sum($query->qualifyColumn('amount'));
     }
 }

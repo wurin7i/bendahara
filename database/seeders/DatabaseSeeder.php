@@ -15,11 +15,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Seed Balance module accounts first
+        $this->call([
+            \WuriN7i\Balance\Database\Seeders\AccountSeeder::class,
+        ]);
 
+        // Seed Bendahara divisions and mappings
+        $this->call([
+            DivisionSeeder::class,
+            DivisionAccountSeeder::class,
+        ]);
+
+        // Create test user
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        $this->command->info('✓ Database seeding completed successfully');
     }
 }

@@ -2,11 +2,27 @@
 
 namespace WuriN7i\Balance\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use WuriN7i\Balance\Enums\TransactionAction;
 
+/**
+ * @property string $id
+ * @property string $transaction_id
+ * @property string $actor_id
+ * @property TransactionAction $action
+ * @property string|null $comment
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property-read Transaction $transaction
+ * @method static Builder ofAction(TransactionAction $action)
+ * @method static Builder byActor(string $actorId)
+ * @method static Builder approvals()
+ * @method static Builder rejections()
+ * @method static Builder voids()
+ * @method static Builder recent()
+ */
 class TransactionLog extends Model
 {
     use HasUuids;
@@ -83,48 +99,48 @@ class TransactionLog extends Model
     /**
      * Scope to filter by action.
      */
-    public function scopeOfAction($query, TransactionAction $action)
+    public function scopeOfAction(Builder $query, TransactionAction $action): Builder
     {
-        return $query->where('action', $action);
+        return $query->where($query->qualifyColumn('action'), $action);
     }
 
     /**
      * Scope to filter by actor.
      */
-    public function scopeByActor($query, string $actorId)
+    public function scopeByActor(Builder $query, string $actorId): Builder
     {
-        return $query->where('actor_id', $actorId);
+        return $query->where($query->qualifyColumn('actor_id'), $actorId);
     }
 
     /**
      * Scope to get approval actions.
      */
-    public function scopeApprovals($query)
+    public function scopeApprovals(Builder $query): Builder
     {
-        return $query->where('action', TransactionAction::APPROVE);
+        return $this->scopeOfAction($query, TransactionAction::APPROVE);
     }
 
     /**
      * Scope to get rejection actions.
      */
-    public function scopeRejections($query)
+    public function scopeRejections(Builder $query): Builder
     {
-        return $query->where('action', TransactionAction::REJECT);
+        return $this->scopeOfAction($query, TransactionAction::REJECT);
     }
 
     /**
      * Scope to get void actions.
      */
-    public function scopeVoids($query)
+    public function scopeVoids(Builder $query): Builder
     {
-        return $query->where('action', TransactionAction::VOID);
+        return $this->scopeOfAction($query, TransactionAction::VOID);
     }
 
     /**
      * Scope to order by most recent.
      */
-    public function scopeRecent($query)
+    public function scopeRecent(Builder $query): Builder
     {
-        return $query->orderBy('created_at', 'desc');
+        return $query->latest($query->qualifyColumn('created_at'));
     }
 }
