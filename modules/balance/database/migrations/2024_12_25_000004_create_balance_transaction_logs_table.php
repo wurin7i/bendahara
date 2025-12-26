@@ -20,16 +20,16 @@ return new class extends Migration
                 'EDIT',
                 'APPROVE',
                 'REJECT',
-                'VOID'
+                'VOID',
             ])->comment('Action performed');
             $table->text('comment')->nullable()->comment('Optional comment (e.g., rejection reason)');
             $table->timestamp('created_at')->useCurrent()->comment('Timestamp of action');
 
             // Foreign keys
             $table->foreign('transaction_id')
-                  ->references('id')
-                  ->on('transactions')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('transactions')
+                ->onDelete('cascade');
 
             // Indexes
             $table->index('transaction_id');

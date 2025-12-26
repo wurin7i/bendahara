@@ -17,7 +17,7 @@ use Illuminate\Notifications\Notifiable;
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
- * 
+ *
  * @extends Model<User>
  */
 class User extends Authenticatable

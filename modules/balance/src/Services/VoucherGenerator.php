@@ -17,9 +17,6 @@ class VoucherGenerator implements VoucherGeneratorInterface
      *
      * Format: PREFIX-YEAR-SEQUENCE
      * Example: VCH-2025-00001
-     *
-     * @param Transaction $transaction
-     * @return string
      */
     public function generate(Transaction $transaction): string
     {
@@ -31,9 +28,6 @@ class VoucherGenerator implements VoucherGeneratorInterface
 
     /**
      * Get the next sequence number for the given year.
-     *
-     * @param string $year
-     * @return int
      */
     protected function getNextSequence(string $year): int
     {
@@ -43,36 +37,32 @@ class VoucherGenerator implements VoucherGeneratorInterface
             ->orderBy('voucher_no', 'desc')
             ->value('voucher_no');
 
-        if (!$lastVoucher) {
+        if (! $lastVoucher) {
             return 1;
         }
 
         $parts = $this->parse($lastVoucher);
+
         return ($parts['sequence'] ?? 0) + 1;
     }
 
     /**
      * Validate if a voucher number follows the correct format.
-     *
-     * @param string $voucherNo
-     * @return bool
      */
     public function isValidFormat(string $voucherNo): bool
     {
         // Format: PREFIX-YEAR-SEQUENCE (e.g., VCH-2025-00001)
         $pattern = '/^[A-Z]{3}-\d{4}-\d{5}$/';
+
         return preg_match($pattern, $voucherNo) === 1;
     }
 
     /**
      * Parse a voucher number to extract components.
-     *
-     * @param string $voucherNo
-     * @return array
      */
     public function parse(string $voucherNo): array
     {
-        if (!$this->isValidFormat($voucherNo)) {
+        if (! $this->isValidFormat($voucherNo)) {
             return [];
         }
 
@@ -90,20 +80,16 @@ class VoucherGenerator implements VoucherGeneratorInterface
      *
      * This allows the application layer to customize prefixes
      * (e.g., division-specific prefixes in Bendahara).
-     *
-     * @param string $prefix
-     * @return self
      */
     public function setPrefix(string $prefix): self
     {
         $this->prefix = strtoupper($prefix);
+
         return $this;
     }
 
     /**
      * Get current prefix.
-     *
-     * @return string
      */
     public function getPrefix(): string
     {

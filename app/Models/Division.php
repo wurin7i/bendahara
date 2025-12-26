@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -25,13 +26,15 @@ use WuriN7i\Balance\Models\Transaction;
  * @property-read Collection<Transaction> $transactions
  * @property-read Collection<JournalEntry> $journalEntries
  * @property-read Collection<Account> $accounts
+ *
  * @method static Builder|static active()
  * @method static Builder|static byCode(string $code)
+ *
  * @extends Model<Division>
  */
 class Division extends Model
 {
-    use HasUuids;
+    use HasFactory, HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -55,7 +58,7 @@ class Division extends Model
 
     /**
      * Get all division accounts (saku) for this division.
-     * 
+     *
      * @return HasMany<DivisionAccount,static>|static
      */
     public function divisionAccounts(): HasMany
@@ -65,7 +68,7 @@ class Division extends Model
 
     /**
      * Get all active division accounts.
-     * 
+     *
      * @return HasMany<DivisionAccount,static>|static
      */
     public function activeDivisionAccounts(): HasMany
@@ -75,7 +78,7 @@ class Division extends Model
 
     /**
      * Get all transactions for this division.
-     * 
+     *
      * @return HasMany<Transaction,static>|static
      */
     public function transactions(): HasMany
@@ -85,7 +88,7 @@ class Division extends Model
 
     /**
      * Get all journal entries through transactions.
-     * 
+     *
      * @return HasManyThrough<JournalEntry,Transaction,static>|static
      */
     public function journalEntries(): HasManyThrough
@@ -102,10 +105,10 @@ class Division extends Model
 
     /**
      * Get all accounts accessible by this division.
-     * 
+     *
      * Returns accounts that have been mapped to this division
      * through the division_accounts pivot table.
-     * 
+     *
      * @return HasManyThrough<Account,DivisionAccount,static>|static
      */
     public function accounts(): HasManyThrough

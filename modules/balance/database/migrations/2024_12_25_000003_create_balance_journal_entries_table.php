@@ -21,14 +21,14 @@ return new class extends Migration
 
             // Foreign keys
             $table->foreign('transaction_id')
-                  ->references('id')
-                  ->on('transactions')
-                  ->onDelete('cascade');
-            
+                ->references('id')
+                ->on('transactions')
+                ->onDelete('cascade');
+
             $table->foreign('account_id')
-                  ->references('id')
-                  ->on('accounts')
-                  ->onDelete('restrict');
+                ->references('id')
+                ->on('accounts')
+                ->onDelete('restrict');
 
             // Indexes
             $table->index('transaction_id');

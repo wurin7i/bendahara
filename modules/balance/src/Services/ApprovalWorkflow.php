@@ -20,19 +20,18 @@ class ApprovalWorkflow
     /**
      * Submit a transaction for approval (DRAFT -> PENDING).
      *
-     * @param Transaction $transaction
      * @throws \Exception
      */
     public function submit(Transaction $transaction): void
     {
-        if (!$transaction->status->canTransitionTo(TransactionStatus::PENDING)) {
+        if (! $transaction->status->canTransitionTo(TransactionStatus::PENDING)) {
             throw new \Exception(
                 "Cannot submit transaction from {$transaction->status->value} status"
             );
         }
 
         // Validate transaction is balanced
-        if (!$transaction->isBalanced()) {
+        if (! $transaction->isBalanced()) {
             throw new \Exception('Transaction journal entries are not balanced');
         }
 
@@ -46,12 +45,11 @@ class ApprovalWorkflow
     /**
      * Approve a transaction (PENDING -> APPROVED).
      *
-     * @param Transaction $transaction
      * @throws \Exception
      */
     public function approve(Transaction $transaction): void
     {
-        if (!$transaction->status->canTransitionTo(TransactionStatus::APPROVED)) {
+        if (! $transaction->status->canTransitionTo(TransactionStatus::APPROVED)) {
             throw new \Exception(
                 "Cannot approve transaction from {$transaction->status->value} status"
             );
@@ -78,13 +76,11 @@ class ApprovalWorkflow
     /**
      * Reject a transaction (PENDING -> REJECTED).
      *
-     * @param Transaction $transaction
-     * @param string $reason
      * @throws \Exception
      */
     public function reject(Transaction $transaction, string $reason): void
     {
-        if (!$transaction->status->canTransitionTo(TransactionStatus::REJECTED)) {
+        if (! $transaction->status->canTransitionTo(TransactionStatus::REJECTED)) {
             throw new \Exception(
                 "Cannot reject transaction from {$transaction->status->value} status"
             );
@@ -104,13 +100,11 @@ class ApprovalWorkflow
     /**
      * Void an approved transaction (APPROVED -> VOID).
      *
-     * @param Transaction $transaction
-     * @param string $reason
      * @throws \Exception
      */
     public function void(Transaction $transaction, string $reason): void
     {
-        if (!$transaction->status->canTransitionTo(TransactionStatus::VOID)) {
+        if (! $transaction->status->canTransitionTo(TransactionStatus::VOID)) {
             throw new \Exception(
                 "Cannot void transaction from {$transaction->status->value} status"
             );
@@ -129,10 +123,6 @@ class ApprovalWorkflow
 
     /**
      * Check if an action can be performed on a transaction.
-     *
-     * @param Transaction $transaction
-     * @param TransactionAction $action
-     * @return bool
      */
     public function canPerformAction(Transaction $transaction, TransactionAction $action): bool
     {
@@ -142,7 +132,6 @@ class ApprovalWorkflow
     /**
      * Get the list of allowed actions for a transaction.
      *
-     * @param Transaction $transaction
      * @return array Array of TransactionAction
      */
     public function getAllowedActions(Transaction $transaction): array
@@ -160,10 +149,6 @@ class ApprovalWorkflow
 
     /**
      * Log an action on a transaction.
-     *
-     * @param Transaction $transaction
-     * @param TransactionAction $action
-     * @param string|null $comment
      */
     protected function logAction(Transaction $transaction, TransactionAction $action, ?string $comment = null): void
     {

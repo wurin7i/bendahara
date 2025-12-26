@@ -34,7 +34,7 @@ class UserActorProvider implements ActorProviderInterface
     public function getActorName(): string
     {
         if (Auth::check()) {
-            return Auth::user()->name ?? Auth::user()->email ?? 'User #' . Auth::id();
+            return Auth::user()->name ?? Auth::user()->email ?? 'User #'.Auth::id();
         }
 
         return 'System';
@@ -43,13 +43,12 @@ class UserActorProvider implements ActorProviderInterface
     /**
      * Check if current actor has permission to perform an action.
      *
-     * @param string $action Action name (e.g., 'approve_transaction', 'create_transaction')
-     * @return bool
+     * @param  string  $action  Action name (e.g., 'approve_transaction', 'create_transaction')
      */
     public function can(string $action): bool
     {
         // Simple permission check - can be extended with Spatie Permission or custom logic
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             // System actions are allowed
             return true;
         }

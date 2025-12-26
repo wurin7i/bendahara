@@ -20,13 +20,13 @@ return new class extends Migration
                 'Liabilities',
                 'Equity',
                 'Income',
-                'Expenses'
+                'Expenses',
             ])->comment('Account category');
             $table->enum('account_behavior', [
                 'FLEXIBLE',
                 'TRANSIT_ONLY',
                 'CREDIT_ONLY',
-                'NON_LIQUID'
+                'NON_LIQUID',
             ])->default('FLEXIBLE')->comment('Account behavior rules');
             $table->timestamps();
 

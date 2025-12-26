@@ -112,7 +112,7 @@ class DivisionAccountService
     public function getLiquidAccounts(Division $division): Collection
     {
         return $division->activeDivisionAccounts()
-            ->whereHas('account', fn($q) => $q->liquid())
+            ->whereHas('account', fn ($q) => $q->liquid())
             ->with('account')
             ->get();
     }
@@ -155,7 +155,7 @@ class DivisionAccountService
                     'display_name' => $divisionAccount->display_name,
                     'is_active' => $divisionAccount->is_active,
                     'account_behavior' => $divisionAccount->account->account_behavior->value,
-                    'account_category' => $divisionAccount->account->account_category->value,
+                    'account_category' => $divisionAccount->account->category->value,
                 ];
             });
     }

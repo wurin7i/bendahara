@@ -20,9 +20,11 @@ use WuriN7i\Balance\Models\Account;
  * @property-read string $display_name
  * @property-read Division $division
  * @property-read Account $account
+ *
  * @method static Builder|$this active()
  * @method static Builder|$this forDivision(string|Division $divisionId)
  * @method static Builder|$this forAccount(string|Account $accountId)
+ *
  * @extends Model<DivisionAccount>
  */
 class DivisionAccount extends Model
@@ -51,7 +53,7 @@ class DivisionAccount extends Model
 
     /**
      * Get the division that owns this mapping.
-     * 
+     *
      * @return BelongsTo<Division,static>|static
      */
     public function division(): BelongsTo
@@ -61,7 +63,7 @@ class DivisionAccount extends Model
 
     /**
      * Get the account from Balance module.
-     * 
+     *
      * @return BelongsTo<Account,static>|static
      */
     public function account(): BelongsTo

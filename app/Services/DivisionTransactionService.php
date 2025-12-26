@@ -9,8 +9,8 @@ use WuriN7i\Balance\Contracts\ActorProviderInterface;
 use WuriN7i\Balance\Contracts\VoucherGeneratorInterface;
 use WuriN7i\Balance\Enums\EntryType;
 use WuriN7i\Balance\Models\Account;
-use WuriN7i\Balance\Services\TransactionService;
 use WuriN7i\Balance\Models\Transaction as BalanceTransaction;
+use WuriN7i\Balance\Services\TransactionService;
 
 class DivisionTransactionService extends TransactionService
 {
@@ -25,11 +25,11 @@ class DivisionTransactionService extends TransactionService
     /**
      * Create a transaction for a specific division.
      *
-     * @param Division $division The division creating the transaction
-     * @param string $description Transaction description
-     * @param array $entries Journal entries [['account_id' => '...', 'entry_type' => EntryType, 'amount' => 123.45], ...]
-     * @param string|null $transactionDate Optional transaction date (defaults to today)
-     * @return BalanceTransaction
+     * @param  Division  $division  The division creating the transaction
+     * @param  string  $description  Transaction description
+     * @param  array  $entries  Journal entries [['account_id' => '...', 'entry_type' => EntryType, 'amount' => 123.45], ...]
+     * @param  string|null  $transactionDate  Optional transaction date (defaults to today)
+     *
      * @throws \Exception
      */
     public function createForDivision(
@@ -42,7 +42,7 @@ class DivisionTransactionService extends TransactionService
         foreach ($entries as $entry) {
             $account = Account::find($entry['account_id']);
 
-            if (!$this->divisionAccountService->isMapped($division, $account)) {
+            if (! $this->divisionAccountService->isMapped($division, $account)) {
                 throw new \Exception("Account {$entry['account_id']} is not mapped to division {$division->name}");
             }
         }
@@ -69,13 +69,12 @@ class DivisionTransactionService extends TransactionService
     /**
      * Create a simple transfer between two accounts in a division.
      *
-     * @param Division $division The division making the transfer
-     * @param string $fromAccountId Account to debit (source)
-     * @param string $toAccountId Account to credit (destination)
-     * @param float $amount Transfer amount
-     * @param string $description Transfer description
-     * @param string|null $transactionDate Optional transaction date
-     * @return BalanceTransaction
+     * @param  Division  $division  The division making the transfer
+     * @param  string  $fromAccountId  Account to debit (source)
+     * @param  string  $toAccountId  Account to credit (destination)
+     * @param  float  $amount  Transfer amount
+     * @param  string  $description  Transfer description
+     * @param  string|null  $transactionDate  Optional transaction date
      */
     public function createTransfer(
         Division $division,

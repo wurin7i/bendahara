@@ -30,12 +30,12 @@ class BalanceServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Load migrations from Balance module
-        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
 
         // Optionally publish migrations if Balance becomes a package
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../../database/migrations' => database_path('migrations'),
+                __DIR__.'/../../database/migrations' => database_path('migrations'),
             ], 'balance-migrations');
         }
     }

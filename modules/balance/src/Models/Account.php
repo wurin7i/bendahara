@@ -4,8 +4,10 @@ namespace WuriN7i\Balance\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use WuriN7i\Balance\Database\Factories\AccountFactory;
 use WuriN7i\Balance\Enums\AccountBehavior;
 use WuriN7i\Balance\Enums\AccountCategory;
 use WuriN7i\Balance\Enums\EntryType;
@@ -19,13 +21,22 @@ use WuriN7i\Balance\Enums\EntryType;
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<JournalEntry> $journalEntries
+ *
  * @method static Builder ofCategory(AccountCategory $accountCategory)
  * @method static Builder ofBehavior(AccountBehavior $accoutBehavior)
  * @method static Builder liquid()
  */
 class Account extends Model
 {
-    use HasUuids;
+    use HasFactory, HasUuids;
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): AccountFactory
+    {
+        return AccountFactory::new();
+    }
 
     /**
      * The table associated with the model.

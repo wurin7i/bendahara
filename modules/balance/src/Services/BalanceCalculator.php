@@ -3,7 +3,6 @@
 namespace WuriN7i\Balance\Services;
 
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use WuriN7i\Balance\Contracts\BalanceCalculatorInterface;
 use WuriN7i\Balance\Enums\EntryType;
 use WuriN7i\Balance\Enums\TransactionStatus;
@@ -15,21 +14,22 @@ class BalanceCalculator implements BalanceCalculatorInterface
     /**
      * Calculate the balance for a specific account.
      *
-     * @param string $accountId The account UUID
-     * @param array $filters Additional filters (e.g., ['division_id' => 'xxx', 'date_from' => '2024-01-01'])
+     * @param  string  $accountId  The account UUID
+     * @param  array  $filters  Additional filters (e.g., ['division_id' => 'xxx', 'date_from' => '2024-01-01'])
      * @return float The calculated balance
      */
     public function getBalance(string $accountId, array $filters = []): float
     {
         $breakdown = $this->getBalanceBreakdown($accountId, $filters);
+
         return $breakdown['balance'];
     }
 
     /**
      * Calculate balances for multiple accounts at once.
      *
-     * @param array $accountIds Array of account UUIDs (empty array = all accounts)
-     * @param array $filters Additional filters
+     * @param  array  $accountIds  Array of account UUIDs (empty array = all accounts)
+     * @param  array  $filters  Additional filters
      * @return array Array of [account_id => balance]
      */
     public function getAccountBalances(array $accountIds = [], array $filters = []): array
@@ -49,8 +49,8 @@ class BalanceCalculator implements BalanceCalculatorInterface
     /**
      * Get detailed balance breakdown for an account.
      *
-     * @param string $accountId The account UUID
-     * @param array $filters Additional filters
+     * @param  string  $accountId  The account UUID
+     * @param  array  $filters  Additional filters
      * @return array ['debits' => float, 'credits' => float, 'balance' => float]
      */
     public function getBalanceBreakdown(string $accountId, array $filters = []): array
@@ -78,8 +78,8 @@ class BalanceCalculator implements BalanceCalculatorInterface
     /**
      * Get all journal entries that affect an account's balance.
      *
-     * @param string $accountId The account UUID
-     * @param array $filters Additional filters
+     * @param  string  $accountId  The account UUID
+     * @param  array  $filters  Additional filters
      * @return Collection Collection of JournalEntry models
      */
     public function getAccountEntries(string $accountId, array $filters = []): Collection
@@ -100,7 +100,7 @@ class BalanceCalculator implements BalanceCalculatorInterface
 
                 // Apply custom filters (e.g., division_id for Bendahara)
                 foreach ($filters as $key => $value) {
-                    if (!in_array($key, ['date_from', 'date_to']) && $value !== null) {
+                    if (! in_array($key, ['date_from', 'date_to']) && $value !== null) {
                         $q->where($key, $value);
                     }
                 }
@@ -113,8 +113,7 @@ class BalanceCalculator implements BalanceCalculatorInterface
     /**
      * Get balance summary for all accounts grouped by category.
      *
-     * @param array $filters Additional filters
-     * @return array
+     * @param  array  $filters  Additional filters
      */
     public function getBalanceSummaryByCategory(array $filters = []): array
     {
@@ -124,7 +123,7 @@ class BalanceCalculator implements BalanceCalculatorInterface
         foreach ($accounts as $account) {
             $category = $account->category->value;
 
-            if (!isset($summary[$category])) {
+            if (! isset($summary[$category])) {
                 $summary[$category] = [
                     'total_balance' => 0,
                     'accounts' => [],
@@ -149,8 +148,7 @@ class BalanceCalculator implements BalanceCalculatorInterface
     /**
      * Calculate total assets.
      *
-     * @param array $filters Additional filters
-     * @return float
+     * @param  array  $filters  Additional filters
      */
     public function getTotalAssets(array $filters = []): float
     {
@@ -163,8 +161,7 @@ class BalanceCalculator implements BalanceCalculatorInterface
     /**
      * Calculate total liabilities.
      *
-     * @param array $filters Additional filters
-     * @return float
+     * @param  array  $filters  Additional filters
      */
     public function getTotalLiabilities(array $filters = []): float
     {
@@ -177,8 +174,7 @@ class BalanceCalculator implements BalanceCalculatorInterface
     /**
      * Calculate equity (Assets - Liabilities).
      *
-     * @param array $filters Additional filters
-     * @return float
+     * @param  array  $filters  Additional filters
      */
     public function getEquity(array $filters = []): float
     {

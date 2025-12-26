@@ -45,7 +45,7 @@ class DivisionBalanceService
                 'display_name' => $divisionAccount?->display_name ?? $account->name,
                 'balance' => $this->getAccountBalance($division, $account),
                 'behavior' => $account->account_behavior->value,
-                'category' => $account->account_category->value,
+                'category' => $account->category->value,
             ];
         }
 

@@ -21,7 +21,7 @@ return new class extends Migration
                 'PENDING',
                 'APPROVED',
                 'REJECTED',
-                'VOID'
+                'VOID',
             ])->default('DRAFT')->comment('Transaction status');
             $table->string('voucher_no', 50)->nullable()->unique()->comment('Voucher number (auto-generated after approval)');
             $table->string('attachment_url')->nullable()->comment('URL to receipt/proof attachment');

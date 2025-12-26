@@ -10,8 +10,10 @@ use WuriN7i\Balance\Models\Transaction as BalanceTransaction;
  * @property string|null $division_id
  * @property-read string $division_name
  * @property-read ?Division $division
+ *
  * @method static Builder|$this forDivision(string|Division $divisionId)
  * @method static Builder|$this forActiveDivision()
+ *
  * @extends BalanceTransaction
  */
 class Transaction extends BalanceTransaction
@@ -31,7 +33,7 @@ class Transaction extends BalanceTransaction
 
     /**
      * Get the division that owns this transaction.
-     * 
+     *
      * @return BelongsTo<Division,static>|static
      */
     public function division(): BelongsTo
@@ -54,7 +56,7 @@ class Transaction extends BalanceTransaction
      */
     public function scopeForActiveDivision(Builder $query): Builder
     {
-        return $query->whereHas('division', fn(Builder $q) => $q->active());
+        return $query->whereHas('division', fn (Builder $q) => $q->active());
     }
 
     public function scopeRecent(Builder $query): Builder
@@ -67,7 +69,7 @@ class Transaction extends BalanceTransaction
      */
     public function hasDivision(): bool
     {
-        return !is_null($this->division_id);
+        return ! is_null($this->division_id);
     }
 
     /**

@@ -55,6 +55,6 @@ class DivisionSeeder extends Seeder
             Division::create($division);
         }
 
-        $this->command->info('✓ Created ' . count($divisions) . ' divisions');
+        $this->command->info('✓ Created '.count($divisions).' divisions');
     }
 }

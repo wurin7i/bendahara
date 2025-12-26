@@ -4,9 +4,10 @@ namespace WuriN7i\Balance\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use WuriN7i\Balance\Enums\EntryType;
+use WuriN7i\Balance\Database\Factories\TransactionFactory;
 use WuriN7i\Balance\Enums\TransactionStatus;
 
 /**
@@ -21,6 +22,7 @@ use WuriN7i\Balance\Enums\TransactionStatus;
  * @property \Illuminate\Support\Carbon $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<JournalEntry> $journalEntries
  * @property-read \Illuminate\Database\Eloquent\Collection<TransactionLog> $logs
+ *
  * @method static Builder ofStatus(TransactionStatus $status)
  * @method static Builder approved()
  * @method static Builder draft()
@@ -30,7 +32,15 @@ use WuriN7i\Balance\Enums\TransactionStatus;
  */
 class Transaction extends Model
 {
-    use HasUuids;
+    use HasFactory, HasUuids;
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): TransactionFactory
+    {
+        return TransactionFactory::new();
+    }
 
     /**
      * The table associated with the model.

@@ -4,8 +4,10 @@ namespace WuriN7i\Balance\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use WuriN7i\Balance\Database\Factories\JournalEntryFactory;
 use WuriN7i\Balance\Enums\EntryType;
 
 /**
@@ -18,6 +20,7 @@ use WuriN7i\Balance\Enums\EntryType;
  * @property \Illuminate\Support\Carbon $updated_at
  * @property-read Transaction $transaction
  * @property-read Account $account
+ *
  * @method static Builder ofType(EntryType $type)
  * @method static Builder debits()
  * @method static Builder credits()
@@ -27,7 +30,15 @@ use WuriN7i\Balance\Enums\EntryType;
  */
 class JournalEntry extends Model
 {
-    use HasUuids;
+    use HasFactory, HasUuids;
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): JournalEntryFactory
+    {
+        return JournalEntryFactory::new();
+    }
 
     /**
      * The table associated with the model.

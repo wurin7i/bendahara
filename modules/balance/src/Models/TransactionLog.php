@@ -16,6 +16,7 @@ use WuriN7i\Balance\Enums\TransactionAction;
  * @property string|null $comment
  * @property \Illuminate\Support\Carbon $created_at
  * @property-read Transaction $transaction
+ *
  * @method static Builder ofAction(TransactionAction $action)
  * @method static Builder byActor(string $actorId)
  * @method static Builder approvals()

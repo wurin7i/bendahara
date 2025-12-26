@@ -46,6 +46,6 @@ enum EntryType: string
      */
     public function decreases(AccountCategory $category): bool
     {
-        return !$this->increases($category);
+        return ! $this->increases($category);
     }
 }

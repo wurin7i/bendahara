@@ -22,9 +22,9 @@ class TransactionService
     /**
      * Create a new transaction with journal entries.
      *
-     * @param array $data Transaction data ['date', 'description', 'total_amount', 'attachment_url']
-     * @param array $journalEntries Array of ['account_id', 'entry_type', 'amount']
-     * @return Transaction
+     * @param  array  $data  Transaction data ['date', 'description', 'total_amount', 'attachment_url']
+     * @param  array  $journalEntries  Array of ['account_id', 'entry_type', 'amount']
+     *
      * @throws \Exception
      */
     public function createTransaction(array $data, array $journalEntries): Transaction
@@ -65,16 +65,15 @@ class TransactionService
     /**
      * Update an existing transaction.
      *
-     * @param Transaction $transaction
-     * @param array $data Transaction data
-     * @param array $journalEntries New journal entries
-     * @return Transaction
+     * @param  array  $data  Transaction data
+     * @param  array  $journalEntries  New journal entries
+     *
      * @throws \Exception
      */
     public function updateTransaction(Transaction $transaction, array $data, array $journalEntries): Transaction
     {
         // Check if transaction is editable
-        if (!$transaction->isEditable()) {
+        if (! $transaction->isEditable()) {
             throw new \Exception("Transaction cannot be edited in {$transaction->status->value} status");
         }
 
@@ -116,7 +115,6 @@ class TransactionService
     /**
      * Validate that debits equal credits (double-entry rule).
      *
-     * @param array $journalEntries
      * @throws \Exception
      */
     public function validateDoubleEntry(array $journalEntries): void
@@ -147,7 +145,6 @@ class TransactionService
     /**
      * Validate account behaviors for the given entries.
      *
-     * @param array $journalEntries
      * @throws \Exception
      */
     protected function validateAccountBehaviors(array $journalEntries): void
@@ -158,12 +155,12 @@ class TransactionService
         foreach ($journalEntries as $entry) {
             $account = $accounts->get($entry['account_id']);
 
-            if (!$account) {
+            if (! $account) {
                 throw new \Exception("Account {$entry['account_id']} not found");
             }
 
             // Check if account is liquid
-            if (!$account->isLiquid()) {
+            if (! $account->isLiquid()) {
                 throw new \Exception(
                     "Account '{$account->name}' ({$account->account_behavior->value}) cannot be used in transactions"
                 );
@@ -201,10 +198,6 @@ class TransactionService
 
     /**
      * Log an action on a transaction.
-     *
-     * @param Transaction $transaction
-     * @param TransactionAction $action
-     * @param string|null $comment
      */
     protected function logAction(Transaction $transaction, TransactionAction $action, ?string $comment = null): void
     {
