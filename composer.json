@@ -1,11 +1,14 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "wurin7i/bendahara",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Multi-division accounting application built on top of WuriN7i/Balance double-entry bookkeeping engine.",
     "keywords": [
         "laravel",
-        "framework"
+        "accounting",
+        "double-entry",
+        "multi-division",
+        "bendahara"
     ],
     "license": "MIT",
     "repositories": [
