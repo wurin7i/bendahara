@@ -1,5 +1,9 @@
 # Bendahara
 
+![Tests](https://img.shields.io/badge/tests-60%20passing-brightgreen)
+![Assertions](https://img.shields.io/badge/assertions-141-blue)
+![Coverage](https://img.shields.io/badge/coverage-comprehensive-success)
+
 Multi-division accounting application built with Laravel 12, powered by **WuriN7i/Balance** double-entry bookkeeping engine.
 
 ## About
@@ -54,9 +58,29 @@ php artisan migrate --seed
 php artisan serve
 ```
 
+## Testing
+
+Comprehensive test suite with 60 tests and 141 assertions:
+
+```bash
+# Run Bendahara tests (Pest PHP)
+vendor/bin/pest
+
+# Run Balance module tests (PHPUnit)
+cd modules/balance && ../../vendor/bin/phpunit
+```
+
+**Test Coverage:**
+- ✅ Bendahara Application: 22 tests (Pest PHP)
+- ✅ Balance Module: 38 tests (PHPUnit with Orchestra Testbench)
+- 📊 100% passing rate
+
+See [`docs/TESTING.md`](docs/TESTING.md) for complete testing guide.
+
 ## Development Status
 
 - [x] **Phase 1: Balance Module** (Complete)
+- [x] **Phase 1.5: Test Suite** (Complete)
 - [ ] **Phase 2: Bendahara Application** (Next)
 
 ## Contributing
